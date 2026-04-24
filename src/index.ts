@@ -23,7 +23,7 @@ interface Match {
   price: string | null;
 }
 
-const SUBREDDITS = ['hardwareswap', 'homelabsales'] as const;
+const SUBREDDITS = ['hardwareswap', 'homelabsales', 'buildapcsales'] as const;
 const NTFY_TOPIC = 'https://ntfy.alexzaw.dev/gpu-blackwell';
 const KV_KEY = 'seen_posts';
 const MAX_SEEN = 1000;
@@ -138,3 +138,4 @@ export default {
     return new Response(`Scan complete. ${count} match(es) found.`, { status: 200 });
   },
 } satisfies ExportedHandler<Env>;
+
