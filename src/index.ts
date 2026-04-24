@@ -39,17 +39,6 @@ const MATCH_KEYWORDS = [
   'pro 6000 blackwell',
 ] as const;
 
-function isNotWTB(post: RedditPost): boolean {
-  // Only exclude explicit WTB (want to buy) posts — don't filter out deals/sale posts
-  const flair = (post.link_flair_text ?? '').toLowerCase();
-  const title = post.title;
-  return (
-    !flair.includes('wtb') &&
-    !flair.includes('buying') &&
-    !/^\[wtb\]/i.test(title) &&
-    !/^\[wantto buy\]/i.test(title)
-  );
-}
 
 function matchesKeyword(title: string): boolean {
   return MATCH_KEYWORDS.some((kw) => title.toLowerCase().includes(kw));
@@ -86,7 +75,6 @@ async function scan(env: Env): Promise<number> {
     for (const { data: post } of data?.data?.children ?? []) {
       if (seen.has(post.id)) continue;
       newSeen.add(post.id);
-      if (!isNotWTB(post)) continue;
       if (!matchesKeyword(post.title)) continue;
 
       matches.push({
@@ -140,5 +128,6 @@ export default {
     return new Response(`Scan complete. ${count} match(es) found.`, { status: 200 });
   },
 } satisfies ExportedHandler<Env>;
+
 
 
