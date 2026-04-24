@@ -1,0 +1,19 @@
+{
+  "name": "hardware-scanner",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SCANNER_KV",
+      "id": "7ace1a92979e45098ef01903713b60da"
+    }
+  ]
+}
