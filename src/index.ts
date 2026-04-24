@@ -39,13 +39,15 @@ const MATCH_KEYWORDS = [
   'pro 6000 blackwell',
 ] as const;
 
-function isWTS(post: RedditPost): boolean {
+function isNotWTB(post: RedditPost): boolean {
+  // Only exclude explicit WTB (want to buy) posts — don't filter out deals/sale posts
   const flair = (post.link_flair_text ?? '').toLowerCase();
+  const title = post.title;
   return (
-    flair.includes('selling') ||
-    flair.includes('wts') ||
-    /^\[wts\]/i.test(post.title) ||
-    /^\[price.?drop\]/i.test(post.title)
+    !flair.includes('wtb') &&
+    !flair.includes('buying') &&
+    !/^\[wtb\]/i.test(title) &&
+    !/^\[wantto buy\]/i.test(title)
   );
 }
 
@@ -84,7 +86,7 @@ async function scan(env: Env): Promise<number> {
     for (const { data: post } of data?.data?.children ?? []) {
       if (seen.has(post.id)) continue;
       newSeen.add(post.id);
-      if (!isWTS(post)) continue;
+      if (!isNotWTB(post)) continue;
       if (!matchesKeyword(post.title)) continue;
 
       matches.push({
@@ -138,4 +140,5 @@ export default {
     return new Response(`Scan complete. ${count} match(es) found.`, { status: 200 });
   },
 } satisfies ExportedHandler<Env>;
+
 
