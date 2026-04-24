@@ -102,18 +102,18 @@ async function scan(env: Env): Promise<number> {
   await env.SCANNER_KV.put(KV_KEY, JSON.stringify(trimmed));
 
   for (const match of matches) {
-    const body = [
+    const lines = [
       match.title,
-      match.price ? `💰 ${match.price}` : 'No price listed',
+      match.price ? `\u{1F4B0} ${match.price}` : 'No price listed',
       match.sub,
-    ].join('
-');
+    ];
+    const body = lines.join('\n');
 
     try {
       await fetch(NTFY_TOPIC, {
         method: 'POST',
         headers: {
-          Title: '🖥️ RTX Pro Blackwell Listed',
+          Title: '\u{1F5A5}\u{FE0F} RTX Pro Blackwell Listed',
           Priority: 'high',
           Tags: 'gpu,money_with_wings',
           Click: match.url,
